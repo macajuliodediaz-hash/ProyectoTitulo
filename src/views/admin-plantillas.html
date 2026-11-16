@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plantillas | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" aria-label="Menú principal">
+    <a href="/admin">Dashboard</a>
+    <a href="#">Revisión</a>
+    <a href="/admin/plantillas" aria-current="page">Plantillas</a>
+    <a href="#">Documentos</a>
+    <a href="#">Usuarios</a>
+  </nav>
+
+  <main class="panel-contenido">
+    <div class="encabezado-seccion">
+      <div>
+        <h2>Plantillas</h2>
+        <p class="texto-suave">Formatos estructurados por cliente. Sus secciones arman el formulario del generador documental.</p>
+      </div>
+      <button type="button" id="boton-nueva" class="boton boton-accion">+ Nueva plantilla</button>
+    </div>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <!-- Formulario de creación / edición -->
+    <section id="panel-formulario" class="tarjeta formulario-plantilla" hidden>
+      <h3 id="titulo-formulario">Nueva plantilla</h3>
+      <div id="error-formulario" class="mensaje-error" role="alert"></div>
+
+      <form id="form-plantilla" novalidate>
+        <div class="fila-campos">
+          <div class="campo">
+            <label for="cliente">Cliente *</label>
+            <select id="cliente" name="cliente" required></select>
+          </div>
+          <div class="campo">
+            <label for="nombre">Nombre de la plantilla *</label>
+            <input type="text" id="nombre" name="nombre" maxlength="100" required
+                   placeholder="Ej.: Informe de diagnóstico en terreno">
+          </div>
+        </div>
+
+        <fieldset class="grupo-secciones">
+          <legend>Secciones del formulario *</legend>
+          <p class="texto-ayuda">El orden de la lista es el orden en que el equipo completará el documento.</p>
+          <ol id="lista-secciones" class="lista-secciones"></ol>
+          <button type="button" id="boton-agregar-seccion" class="boton-borde">+ Agregar sección</button>
+        </fieldset>
+
+        <div class="acciones-formulario">
+          <button type="button" id="boton-cancelar" class="boton-borde">Cancelar</button>
+          <button type="submit" id="boton-guardar" class="boton boton-accion">Guardar plantilla</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Listado -->
+    <section class="tarjeta">
+      <div class="barra-filtros">
+        <label for="filtro-cliente">Cliente</label>
+        <select id="filtro-cliente">
+          <option value="">Todos los clientes</option>
+        </select>
+      </div>
+
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Plantilla</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Secciones</th>
+              <th scope="col">Documentos</th>
+              <th scope="col">Estado</th>
+              <th scope="col"><span class="solo-lectores">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
+      </div>
+      <p id="tabla-vacia" class="texto-suave tabla-vacia" hidden>No hay plantillas para mostrar.</p>
+    </section>
+  </main>
+
+  <template id="plantilla-fila-seccion">
+    <li class="fila-seccion">
+      <span class="numero-seccion" aria-hidden="true"></span>
+      <input type="text" class="nombre-seccion" maxlength="80" required aria-label="Nombre de la sección"
+             placeholder="Nombre de la sección">
+      <div class="controles-seccion">
+        <label class="opcion"><input type="checkbox" class="obligatoria" checked> Obligatoria</label>
+        <label class="opcion"><input type="checkbox" class="permite-imagenes"> Imágenes</label>
+        <span class="botones-seccion">
+          <button type="button" class="boton-icono subir" aria-label="Subir sección">↑</button>
+          <button type="button" class="boton-icono bajar" aria-label="Bajar sección">↓</button>
+          <button type="button" class="boton-icono quitar" aria-label="Quitar sección">✕</button>
+        </span>
+      </div>
+    </li>
+  </template>
+
+  <script src="/js/panel.js" defer></script>
+  <script src="/js/plantillas.js" defer></script>
+</body>
+</html>

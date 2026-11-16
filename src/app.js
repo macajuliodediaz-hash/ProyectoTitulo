@@ -5,6 +5,8 @@ const session = require('express-session');
 const config = require('./config/env');
 const rutasAuth = require('./routes/auth');
 const rutasPaginas = require('./routes/paginas');
+const rutasPlantillas = require('./routes/plantillas');
+const { ErrorNegocio } = require('./services/errores');
 
 const app = express();
 
@@ -38,6 +40,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api', rutasAuth);
+app.use('/api', rutasPlantillas);
 app.use(rutasPaginas);
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
@@ -50,6 +53,14 @@ app.use((req, res) => {
 // Errores no controlados: se registran en el servidor sin exponer detalles al usuario.
 // eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {
+  // Errores de validación o de reglas de negocio: se muestran tal cual al usuario.
+  if (error instanceof ErrorNegocio) {
+    return res.status(error.estado).json({ error: error.message });
+  }
+  // JSON mal formado enviado por el navegador
+  if (error.type === 'entity.parse.failed') {
+    return res.status(400).json({ error: 'Los datos enviados no son válidos.' });
+  }
   console.error('[error]', error);
   if (req.originalUrl.startsWith('/api/')) {
     return res.status(500).json({ error: 'Ocurrió un error en el servidor. Intenta nuevamente.' });

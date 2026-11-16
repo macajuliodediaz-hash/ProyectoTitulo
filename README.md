@@ -45,7 +45,11 @@ argusnexus/
    ```bash
    npm run seed
    ```
-5. Iniciar el servidor:
+5. Cargar los datos de demostración (clientes ficticios y las 5 plantillas base):
+   ```bash
+   npm run demo
+   ```
+6. Iniciar el servidor:
    ```bash
    npm start
    ```
@@ -57,6 +61,19 @@ argusnexus/
 |---|---|---|
 | Administrador | `/admin` | Dashboard, revisión, plantillas, usuarios, confidencialidad |
 | Equipo | `/equipo` | Generar documentos, corregir, consultar el repositorio |
+
+## Plantillas base
+
+Las 5 plantillas de demostración se definieron analizando la estructura (no el contenido)
+de informes reales emitidos por GEN BackOffice. Todos los datos de demostración son ficticios.
+
+| Plantilla | Uso |
+|---|---|
+| Informe de diagnóstico en terreno | Visitas a faena: hallazgos, impacto y matriz de acciones |
+| Informe de inspección y hallazgos | Bodega, inventario y auditorías |
+| Informe ejecutivo financiero | Desempeño del período, costos y comparativos |
+| Informe técnico-normativo | Marco legal, análisis y plan de intervención |
+| Manual | Guías de uso y matrices de referencia |
 
 ## Parámetros del SLA
 
@@ -73,7 +90,7 @@ Los plazos del SLA son configurables desde `.env` y se leen solo desde `src/conf
 
 - [x] Base de datos (14 tablas, 3FN)
 - [x] Ingreso con credenciales cifradas y redirección por rol (RF1)
-- [ ] Gestión de plantillas (RF5)
+- [x] Gestión de plantillas por cliente: crear, editar, reordenar secciones, dar de baja y eliminar (RF5)
 - [ ] Generador documental con vista previa (RF2, RF3)
 - [ ] Gestión de cuentas de usuario
 - [ ] Flujo de revisión, SLA y auditoría (RF4, RF7, RF8, RF9)
