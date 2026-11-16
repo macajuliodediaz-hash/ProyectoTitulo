@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de administración | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" aria-label="Menú principal">
+    <a href="/admin" aria-current="page">Dashboard</a>
+    <a href="#">Revisión</a>
+    <a href="#">Plantillas</a>
+    <a href="#">Documentos</a>
+    <a href="#">Usuarios</a>
+  </nav>
+
+  <main class="panel-contenido">
+    <h2>Dashboard</h2>
+    <p class="texto-suave">Panel de revisión y control de GEN BackOffice.</p>
+
+    <section class="grilla-tarjetas">
+      <article class="tarjeta">
+        <h3>Documentos pendientes</h3>
+        <p>Documentos En Revisión que esperan aprobación o rechazo.</p>
+      </article>
+      <article class="tarjeta">
+        <h3>SLA críticos</h3>
+        <p>Correcciones con menos de 2 horas para vencer.</p>
+      </article>
+      <article class="tarjeta">
+        <h3>Métricas de corrección</h3>
+        <p>Iteraciones y tasa de rechazo por cliente.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+</body>
+</html>

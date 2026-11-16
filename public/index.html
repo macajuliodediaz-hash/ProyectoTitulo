@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingreso | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body class="login-pagina">
+
+  <main class="login-tarjeta">
+    <header class="marca">
+      <h1>ArgusNexus</h1>
+      <p>Gestión documental · GEN BackOffice</p>
+    </header>
+
+    <div id="mensaje-error" class="mensaje-error" role="alert"></div>
+
+    <form id="form-login" action="/api/login" method="post">
+      <div class="campo">
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" name="correo" autocomplete="username" required>
+      </div>
+
+      <div class="campo">
+        <label for="clave">Contraseña</label>
+        <input type="password" id="clave" name="clave" autocomplete="current-password" required>
+      </div>
+
+      <button type="submit" class="boton">Ingresar</button>
+    </form>
+
+    <p class="pie-login">Acceso exclusivo para el equipo de GEN BackOffice</p>
+  </main>
+
+  <script src="/js/login.js" defer></script>
+
+</body>
+</html>

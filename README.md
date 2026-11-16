@@ -1,0 +1,81 @@
+# ArgusNexus
+
+Sistema web de gestión y estandarización documental para **GEN BackOffice**.
+Proyecto de Título — Analista Programador (Iplacex), 2026.
+
+## Tecnologías
+
+| Capa | Tecnología |
+|---|---|
+| Frontend | HTML5, CSS puro (responsive, sin frameworks) y JavaScript |
+| Backend | Node.js con Express |
+| Base de datos | MySQL 8 (InnoDB, modelo relacional en 3FN, 14 tablas) |
+| Acceso a datos | mysql2 con consultas parametrizadas y transacciones |
+| Seguridad | Contraseñas con bcrypt, sesiones con cookie `httpOnly`, control de rol en el servidor |
+
+## Estructura
+
+```
+argusnexus/
+├── database/            scripts SQL (esquema y reglas opcionales)
+├── public/              HTML, CSS y JavaScript del cliente (acceso público)
+├── scripts/             utilidades (creación de cuentas de prueba)
+├── src/
+│   ├── config/          variables de entorno, conexión MySQL y parámetros SLA
+│   ├── middlewares/     validación de sesión y rol
+│   ├── routes/          rutas por módulo
+│   ├── services/        reglas de negocio
+│   ├── repositories/    consultas SQL parametrizadas
+│   ├── jobs/            tareas programadas (temporizador SLA)
+│   └── views/           páginas protegidas por rol
+└── uploads/             imágenes cargadas (fuera de las rutas públicas)
+```
+
+## Instalación local
+
+1. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+2. Crear la base de datos ejecutando en MySQL Workbench:
+   - `database/argusnexus_schema.sql` (obligatorio)
+   - `database/argusnexus_reglas_opcionales.sql` (vista SLA y triggers de auditoría)
+3. Copiar `.env.example` como `.env` y completar los valores (`DB_PASSWORD`, `SESSION_SECRET` y las claves de prueba).
+4. Crear las cuentas de prueba de ambos perfiles:
+   ```bash
+   npm run seed
+   ```
+5. Iniciar el servidor:
+   ```bash
+   npm start
+   ```
+   Abrir <http://localhost:3000>.
+
+## Perfiles
+
+| Perfil | Interfaz | Funciones principales |
+|---|---|---|
+| Administrador | `/admin` | Dashboard, revisión, plantillas, usuarios, confidencialidad |
+| Equipo | `/equipo` | Generar documentos, corregir, consultar el repositorio |
+
+## Parámetros del SLA
+
+Los plazos del SLA son configurables desde `.env` y se leen solo desde `src/config/sla.js`:
+
+| Variable | Valor | Requerimiento |
+|---|---|---|
+| `SLA_HORAS_PLAZO` | 24 | RF8: plazo de corrección |
+| `SLA_HORAS_UMBRAL_EXTENSION` | 2 | RNF7: tiempo restante para poder pedir la extensión |
+| `SLA_HORAS_EXTENSION` | 2 | RNF7: horas que agrega la extensión única |
+| `SLA_HORAS_UMBRAL_CRITICO` | 2 | RNF6: tiempo restante para marcar la fila como crítica |
+
+## Estado de avance
+
+- [x] Base de datos (14 tablas, 3FN)
+- [x] Ingreso con credenciales cifradas y redirección por rol (RF1)
+- [ ] Gestión de plantillas (RF5)
+- [ ] Generador documental con vista previa (RF2, RF3)
+- [ ] Gestión de cuentas de usuario
+- [ ] Flujo de revisión, SLA y auditoría (RF4, RF7, RF8, RF9)
+- [ ] Dashboard y buscador (RF6, RF10)
+- [ ] Despliegue en hosting

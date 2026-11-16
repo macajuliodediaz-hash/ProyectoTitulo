@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis tareas | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" aria-label="Menú principal">
+    <a href="/equipo" aria-current="page">Mis tareas</a>
+    <a href="#">Nuevo documento</a>
+    <a href="#">Repositorio</a>
+    <a href="#">Mi perfil</a>
+  </nav>
+
+  <main class="panel-contenido">
+    <h2>Mis tareas</h2>
+    <p class="texto-suave">Documentos en borrador, en revisión y con correcciones pendientes.</p>
+
+    <section class="grilla-tarjetas">
+      <article class="tarjeta">
+        <h3>Borradores</h3>
+        <p>Documentos que aún no envías a revisión.</p>
+      </article>
+      <article class="tarjeta">
+        <h3>En corrección</h3>
+        <p>Documentos devueltos con su plazo SLA vigente.</p>
+      </article>
+      <article class="tarjeta">
+        <h3>Notificaciones</h3>
+        <p>Avisos de devoluciones, plazos y bloqueos.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+</body>
+</html>
