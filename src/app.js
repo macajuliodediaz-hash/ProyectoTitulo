@@ -6,6 +6,8 @@ const config = require('./config/env');
 const rutasAuth = require('./routes/auth');
 const rutasPaginas = require('./routes/paginas');
 const rutasPlantillas = require('./routes/plantillas');
+const rutasDocumentos = require('./routes/documentos');
+const rutasClientes = require('./routes/clientes');
 const { ErrorNegocio } = require('./services/errores');
 
 const app = express();
@@ -40,7 +42,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/api', rutasAuth);
+app.use('/api', rutasClientes);
 app.use('/api', rutasPlantillas);
+app.use('/api', rutasDocumentos);
 app.use(rutasPaginas);
 app.use(express.static(path.join(__dirname, '..', 'public')));
 

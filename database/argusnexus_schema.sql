@@ -51,6 +51,7 @@ CREATE TABLE usuarios (
 CREATE TABLE clientes (
   id_cliente             INT NOT NULL AUTO_INCREMENT,
   nombre_cliente         VARCHAR(100) NOT NULL,
+  logo_ruta              VARCHAR(255) NULL,
   activo                 TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (id_cliente),
   CONSTRAINT uq_clientes_nombre_cliente UNIQUE (nombre_cliente)

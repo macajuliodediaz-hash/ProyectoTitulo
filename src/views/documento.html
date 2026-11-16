@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documento | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
+
+  <main class="panel-contenido">
+    <div class="encabezado-seccion">
+      <a href="/" class="enlace-volver">← Volver al inicio</a>
+      <div class="acciones-documento" id="acciones"></div>
+    </div>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <div id="hoja"><p class="texto-suave">Cargando documento…</p></div>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+  <script src="/js/documento-vista.js" defer></script>
+  <script src="/js/documento.js" defer></script>
+</body>
+</html>

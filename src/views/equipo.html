@@ -6,7 +6,7 @@
   <title>Mis tareas | ArgusNexus</title>
   <link rel="stylesheet" href="/css/estilos.css">
 </head>
-<body>
+<body data-menu="tareas">
 
   <header class="panel-cabecera">
     <h1 class="panel-marca">ArgusNexus</h1>
@@ -17,33 +17,59 @@
     </div>
   </header>
 
-  <nav class="panel-navegacion" aria-label="Menú principal">
-    <a href="/equipo" aria-current="page">Mis tareas</a>
-    <a href="#">Nuevo documento</a>
-    <a href="#">Repositorio</a>
-    <a href="#">Mi perfil</a>
-  </nav>
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
 
   <main class="panel-contenido">
-    <h2>Mis tareas</h2>
-    <p class="texto-suave">Documentos en borrador, en revisión y con correcciones pendientes.</p>
+    <div class="encabezado-seccion">
+      <div>
+        <h2>Mis tareas</h2>
+        <p class="texto-suave">Gestiona tus documentos y atiende los plazos de revisión.</p>
+      </div>
+      <a href="/equipo/nuevo" class="boton boton-accion">+ Nuevo documento</a>
+    </div>
 
-    <section class="grilla-tarjetas">
-      <article class="tarjeta">
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <section class="grilla-tarjetas contadores">
+      <article class="tarjeta contador">
+        <p class="contador-numero" id="total-borrador">0</p>
         <h3>Borradores</h3>
-        <p>Documentos que aún no envías a revisión.</p>
+        <p>Aún no enviados a revisión.</p>
       </article>
-      <article class="tarjeta">
-        <h3>En corrección</h3>
-        <p>Documentos devueltos con su plazo SLA vigente.</p>
+      <article class="tarjeta contador">
+        <p class="contador-numero" id="total-revision">0</p>
+        <h3>En revisión</h3>
+        <p>Bloqueados mientras el administrador revisa.</p>
       </article>
-      <article class="tarjeta">
-        <h3>Notificaciones</h3>
-        <p>Avisos de devoluciones, plazos y bloqueos.</p>
+      <article class="tarjeta contador contador-alerta">
+        <p class="contador-numero" id="total-correccion">0</p>
+        <h3>Requieren corrección</h3>
+        <p>Devueltos con plazo SLA vigente.</p>
       </article>
+    </section>
+
+    <section class="tarjeta">
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Código</th>
+              <th scope="col">Documento</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Actualizado</th>
+              <th scope="col"><span class="solo-lectores">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
+      </div>
+      <p id="tabla-vacia" class="texto-suave tabla-vacia" hidden>
+        Aún no tienes documentos. Crea el primero con «Nuevo documento».
+      </p>
     </section>
   </main>
 
   <script src="/js/panel.js" defer></script>
+  <script src="/js/equipo.js" defer></script>
 </body>
 </html>

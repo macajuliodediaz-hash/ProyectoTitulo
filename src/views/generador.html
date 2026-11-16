@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador documental | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body data-menu="nuevo">
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
+
+  <main class="panel-contenido">
+    <div class="encabezado-seccion">
+      <div>
+        <h2 id="titulo-pagina">Nuevo documento</h2>
+        <p class="texto-suave" id="subtitulo-pagina">Completa la información y revisa la vista previa antes de guardar.</p>
+      </div>
+    </div>
+
+    <ol class="pasos" aria-label="Pasos">
+      <li id="paso-1" class="activo">1. Completar</li>
+      <li id="paso-2">2. Vista previa</li>
+      <li id="paso-3">3. Guardar</li>
+    </ol>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <!-- ============ Paso 1: formulario ============ -->
+    <form id="form-documento" novalidate>
+      <section class="tarjeta bloque">
+        <h3 class="titulo-bloque">Información del documento</h3>
+
+        <div class="fila-campos" id="campos-nuevo">
+          <div class="campo">
+            <label for="cliente">Cliente *</label>
+            <select id="cliente" required>
+              <option value="">Selecciona un cliente</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="plantilla">Plantilla *</label>
+            <select id="plantilla" required disabled>
+              <option value="">Primero selecciona un cliente</option>
+            </select>
+          </div>
+        </div>
+
+        <dl class="datos-fijos" id="datos-edicion" hidden>
+          <div><dt>Código</dt><dd id="fijo-codigo"></dd></div>
+          <div><dt>Cliente</dt><dd id="fijo-cliente"></dd></div>
+          <div><dt>Plantilla</dt><dd id="fijo-plantilla"></dd></div>
+          <div><dt>Estado</dt><dd id="fijo-estado"></dd></div>
+        </dl>
+
+        <div class="campo">
+          <label for="titulo">Título del documento *</label>
+          <input type="text" id="titulo" maxlength="150" required placeholder="Introduce un título descriptivo">
+        </div>
+      </section>
+
+      <section class="tarjeta bloque" id="bloque-secciones" hidden>
+        <h3 class="titulo-bloque">Contenido</h3>
+        <p class="texto-ayuda">Las secciones con * son obligatorias. Imágenes: JPG, PNG o WEBP, hasta 5 MB cada una y 5 por sección.</p>
+        <div id="contenedor-secciones"></div>
+      </section>
+
+      <div class="acciones-formulario">
+        <a href="/equipo" class="boton-borde">Cancelar</a>
+        <button type="submit" id="boton-previsualizar" class="boton boton-accion" disabled>Previsualizar documento</button>
+      </div>
+    </form>
+
+    <!-- ============ Paso 2: vista previa ============ -->
+    <section id="vista-previa" hidden>
+      <div class="aviso aviso-info visible">
+        Revisa el documento con atención: solo se guardará exactamente lo que ves en esta vista previa.
+      </div>
+      <div id="hoja-previa"><p class="texto-suave">Preparando hojas…</p></div>
+      <div class="acciones-formulario">
+        <button type="button" id="boton-volver" class="boton-borde">Volver a editar</button>
+        <button type="button" id="boton-imprimir" class="boton-borde">Imprimir / Guardar PDF</button>
+        <button type="button" id="boton-guardar" class="boton boton-accion">Guardar documento</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+  <script src="/js/documento-vista.js" defer></script>
+  <script src="/js/generador.js" defer></script>
+</body>
+</html>

@@ -29,6 +29,7 @@ async function listar({ soloActivas = false, idCliente = null } = {}) {
 async function buscarPorId(idPlantilla) {
   const [filas] = await pool.execute(
     `SELECT p.id_plantilla, p.id_cliente, p.nombre_plantilla, p.activa, c.nombre_cliente,
+            (c.logo_ruta IS NOT NULL) AS cliente_tiene_logo,
             (SELECT COUNT(*) FROM documentos d WHERE d.id_plantilla = p.id_plantilla) AS total_documentos
        FROM plantillas p
        JOIN clientes c ON c.id_cliente = p.id_cliente

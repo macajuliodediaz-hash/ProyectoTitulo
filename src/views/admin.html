@@ -6,7 +6,7 @@
   <title>Panel de administración | ArgusNexus</title>
   <link rel="stylesheet" href="/css/estilos.css">
 </head>
-<body>
+<body data-menu="dashboard">
 
   <header class="panel-cabecera">
     <h1 class="panel-marca">ArgusNexus</h1>
@@ -17,13 +17,7 @@
     </div>
   </header>
 
-  <nav class="panel-navegacion" aria-label="Menú principal">
-    <a href="/admin" aria-current="page">Dashboard</a>
-    <a href="#">Revisión</a>
-    <a href="/admin/plantillas">Plantillas</a>
-    <a href="#">Documentos</a>
-    <a href="#">Usuarios</a>
-  </nav>
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
 
   <main class="panel-contenido">
     <h2>Dashboard</h2>

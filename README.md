@@ -40,6 +40,7 @@ argusnexus/
 2. Crear la base de datos ejecutando en MySQL Workbench:
    - `database/argusnexus_schema.sql` (obligatorio)
    - `database/argusnexus_reglas_opcionales.sql` (vista SLA y triggers de auditoría)
+   - Si la base se creó antes del 16-11-2026: `database/migraciones/001_logo_clientes.sql`
 3. Copiar `.env.example` como `.env` y completar los valores (`DB_PASSWORD`, `SESSION_SECRET` y las claves de prueba).
 4. Crear las cuentas de prueba de ambos perfiles:
    ```bash
@@ -90,9 +91,12 @@ Los plazos del SLA son configurables desde `.env` y se leen solo desde `src/conf
 
 - [x] Base de datos (14 tablas, 3FN)
 - [x] Ingreso con credenciales cifradas y redirección por rol (RF1)
+- [x] Gestión de clientes con logo para el encabezado de los documentos
 - [x] Gestión de plantillas por cliente: crear, editar, reordenar secciones, dar de baja y eliminar (RF5)
-- [ ] Generador documental con vista previa (RF2, RF3)
+- [x] Generador documental: formulario dinámico por plantilla, imágenes por sección y vista previa obligatoria validada en el servidor (RF2, RF3)
+- [x] Documentos en hojas tamaño carta con el formato de GEN BackOffice (portada, control documental, encabezado con logos, pie con número de página) e impresión / PDF
 - [ ] Gestión de cuentas de usuario
-- [ ] Flujo de revisión, SLA y auditoría (RF4, RF7, RF8, RF9)
+- [x] Envío a revisión con bloqueo de edición y registro de auditoría (RF4, RNF8)
+- [ ] Revisión del Administrador, SLA y bloqueo automático (RF7, RF8, RF9)
 - [ ] Dashboard y buscador (RF6, RF10)
 - [ ] Despliegue en hosting

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body data-menu="clientes">
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
+
+  <main class="panel-contenido">
+    <div class="encabezado-seccion">
+      <div>
+        <h2>Clientes</h2>
+        <p class="texto-suave">Empresas para las que GEN BackOffice emite documentos. Su logo aparece en el encabezado de cada documento.</p>
+      </div>
+      <button type="button" id="boton-nuevo" class="boton boton-accion">+ Nuevo cliente</button>
+    </div>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <section id="panel-formulario" class="tarjeta formulario-plantilla" hidden>
+      <h3 id="titulo-formulario">Nuevo cliente</h3>
+      <div id="error-formulario" class="mensaje-error" role="alert"></div>
+      <form id="form-cliente" novalidate>
+        <div class="fila-campos">
+          <div class="campo">
+            <label for="nombre">Nombre del cliente *</label>
+            <input type="text" id="nombre" maxlength="100" required placeholder="Ej.: Minera Cordillera Norte SpA">
+          </div>
+          <div class="campo">
+            <span class="etiqueta-campo">Logo (opcional)</span>
+            <div class="selector-logo">
+              <div class="vista-logo" id="vista-logo"><span>Sin logo</span></div>
+              <div>
+                <input type="file" id="logo" accept="image/png,image/jpeg,image/webp" class="entrada-oculta">
+                <label for="logo" class="boton-borde boton-adjuntar">Elegir imagen</label>
+                <button type="button" id="boton-quitar-logo" class="boton-enlace peligro" hidden>Quitar logo</button>
+                <p class="texto-ayuda">PNG, JPG o WEBP, hasta 2 MB. Ideal: fondo blanco o transparente.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="acciones-formulario">
+          <button type="button" id="boton-cancelar" class="boton-borde">Cancelar</button>
+          <button type="submit" id="boton-guardar" class="boton boton-accion">Guardar cliente</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="tarjeta">
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Logo</th>
+              <th scope="col">Cliente</th>
+              <th scope="col">Plantillas</th>
+              <th scope="col">Estado</th>
+              <th scope="col"><span class="solo-lectores">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
+      </div>
+      <p id="tabla-vacia" class="texto-suave tabla-vacia" hidden>No hay clientes registrados.</p>
+    </section>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+  <script src="/js/clientes.js" defer></script>
+</body>
+</html>

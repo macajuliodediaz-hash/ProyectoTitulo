@@ -2,7 +2,7 @@
 // así no se pueden abrir sin pasar por la validación del servidor.
 const path = require('path');
 const express = require('express');
-const { requiereRol } = require('../middlewares/auth');
+const { requiereSesion, requiereRol } = require('../middlewares/auth');
 const { ROLES, inicioSegunRol } = require('../services/authService');
 
 const router = express.Router();
@@ -17,6 +17,12 @@ router.get('/', (req, res, next) => {
 
 router.get('/admin', requiereRol(ROLES.ADMIN), (req, res) => res.sendFile(vista('admin.html')));
 router.get('/admin/plantillas', requiereRol(ROLES.ADMIN), (req, res) => res.sendFile(vista('admin-plantillas.html')));
+router.get('/admin/clientes', requiereRol(ROLES.ADMIN), (req, res) => res.sendFile(vista('admin-clientes.html')));
 router.get('/equipo', requiereRol(ROLES.EQUIPO), (req, res) => res.sendFile(vista('equipo.html')));
+router.get('/equipo/nuevo', requiereRol(ROLES.EQUIPO), (req, res) => res.sendFile(vista('generador.html')));
+router.get('/equipo/documentos/:id/editar', requiereRol(ROLES.EQUIPO), (req, res) => res.sendFile(vista('generador.html')));
+
+// Vista de un documento: ambos perfiles (el permiso sobre el documento lo valida la API).
+router.get('/documentos/:id', requiereSesion, (req, res) => res.sendFile(vista('documento.html')));
 
 module.exports = router;

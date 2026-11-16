@@ -1,4 +1,4 @@
-// API de plantillas y clientes.
+// API de plantillas.
 //   Lectura: ambos perfiles (el Equipo necesita las plantillas activas para generar documentos).
 //   Escritura: solo Administrador (RF5).
 const express = require('express');
@@ -6,7 +6,6 @@ const { requiereSesion, requiereRol } = require('../middlewares/auth');
 const { ROLES } = require('../services/authService');
 const plantillasService = require('../services/plantillasService');
 const plantillasRepo = require('../repositories/plantillasRepo');
-const clientesRepo = require('../repositories/clientesRepo');
 
 const router = express.Router();
 const soloAdmin = requiereRol(ROLES.ADMIN);
@@ -19,14 +18,6 @@ function idValido(req, res) {
   }
   return id;
 }
-
-router.get('/clientes', requiereSesion, async (req, res, next) => {
-  try {
-    res.json({ clientes: await clientesRepo.listarActivos() });
-  } catch (error) {
-    next(error);
-  }
-});
 
 router.get('/plantillas', requiereSesion, async (req, res, next) => {
   try {
