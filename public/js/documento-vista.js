@@ -65,12 +65,9 @@
     const filas = [
       ['Código', d.codigo || 'Se asigna al guardar'],
       ['Cliente', d.cliente],
-      ['Plantilla', d.plantilla],
       ['Revisión', `Rev. ${d.revision || 0}`],
       ['Fecha', formatoFecha(d.fecha || new Date(), false)],
-      ['Elaborado por', d.autor],
-      ['Estado', d.estado === 'Bloqueado_SLA' ? 'Bloqueado (SLA)' : d.estado],
-      ['Clasificación', d.confidencial ? 'Documento confidencial - Uso interno GEN' : 'Uso interno GEN'],
+      ['Elaborado por', 'GEN BackOffice'], // el emisor del documento es siempre la empresa, no la persona
     ];
     for (const [nombre, valor] of filas) {
       const fila = elemento('tr');
@@ -112,12 +109,10 @@
   }
 
   // ---------------------------------------------------------------- hojas
-  // Hojas de contenido: encabezado con logo GEN | título y cliente | logo del cliente.
-  // La portada no lleva encabezado (ya presenta el logo y el título en grande).
+  // Todas las hojas, incluida la portada: encabezado con logo GEN | título y cliente | logo del cliente.
   function crearHoja(d, esPortada = false) {
     const hoja = elemento('article', esPortada ? 'pagina pagina-portada' : 'pagina');
     const encabezado = elemento('header', 'pagina-encabezado');
-    if (esPortada) encabezado.hidden = true;
     const izquierda = elemento('div', 'encabezado-logo');
     izquierda.append(logoGen());
     const centro = elemento('div', 'encabezado-centro');

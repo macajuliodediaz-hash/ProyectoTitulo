@@ -43,9 +43,16 @@ module.exports = {
 
   // Parámetros del SLA (observación 2: un único lugar configurable en el servidor)
   sla: {
-    horasPlazo: numero('SLA_HORAS_PLAZO', 24),
+    horasPlazo: entero('SLA_HORAS_PLAZO', 24), // se guarda en historial_sla.horas_plazo (SMALLINT)
     horasUmbralExtension: numero('SLA_HORAS_UMBRAL_EXTENSION', 2),
-    horasExtension: numero('SLA_HORAS_EXTENSION', 2),
+    horasExtension: entero('SLA_HORAS_EXTENSION', 2), // se guarda en historial_sla.horas_extension (SMALLINT)
     horasUmbralCritico: numero('SLA_HORAS_UMBRAL_CRITICO', 2),
+    segundosRevisionVencimientos: entero('SLA_SEGUNDOS_REVISION', 60),
   },
 };
+
+function entero(nombre, porDefecto) {
+  const n = numero(nombre, porDefecto);
+  if (!Number.isInteger(n) || n < 1) throw new Error(`La variable ${nombre} debe ser un número entero mayor que 0.`);
+  return n;
+}

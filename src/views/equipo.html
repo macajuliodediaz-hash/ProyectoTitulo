@@ -56,6 +56,7 @@
               <th scope="col">Código</th>
               <th scope="col">Documento</th>
               <th scope="col">Estado</th>
+              <th scope="col">Plazo SLA</th>
               <th scope="col">Actualizado</th>
               <th scope="col"><span class="solo-lectores">Acciones</span></th>
             </tr>
@@ -66,6 +67,15 @@
       <p id="tabla-vacia" class="texto-suave tabla-vacia" hidden>
         Aún no tienes documentos. Crea el primero con «Nuevo documento».
       </p>
+    </section>
+
+    <section class="tarjeta notificaciones" aria-labelledby="titulo-notificaciones">
+      <div class="encabezado-notificaciones">
+        <h3 id="titulo-notificaciones">Notificaciones <span id="contador-notificaciones" class="insignia insignia-revision" hidden></span></h3>
+        <button type="button" id="boton-leidas" class="boton-enlace" hidden>Marcar todas como leídas</button>
+      </div>
+      <ul id="lista-notificaciones" class="lista-notificaciones"></ul>
+      <p id="sin-notificaciones" class="texto-suave" hidden>No tienes notificaciones.</p>
     </section>
   </main>
 

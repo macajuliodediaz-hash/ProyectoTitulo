@@ -998,12 +998,15 @@ a.celda-principal:hover {
   font-size: 64px;
 }
 
+/* Paleta estándar de los informes (azules y celestes de GEN BackOffice):
+   azul oscuro #1b2a4a (títulos), azul #003b70 (cabeceras), azul medio #2e6da4 (emisor),
+   celeste #d9e2f3 (franjas de sección) y celeste muy claro #f3f6f9 (filas alternas). */
 .hoja-emisor {
   margin: 56px 0 0;
   font-size: 14px;
   font-weight: bold;
   letter-spacing: 0.03em;
-  color: #767171;
+  color: #2e6da4;
 }
 
 .hoja-titulo {
@@ -1011,7 +1014,7 @@ a.celda-principal:hover {
   font-size: 28px;
   line-height: 1.25;
   text-transform: uppercase;
-  color: #404040;
+  color: #1b2a4a;
   overflow-wrap: anywhere;
 }
 
@@ -1019,8 +1022,7 @@ a.celda-principal:hover {
   font-size: 21px;
 }
 
-
-/* Recuadro de Control documental (estilo gris de los informes de GEN) */
+/* Recuadro de Control documental */
 .tabla-control {
   flex: none;
   width: 100%;
@@ -1032,28 +1034,28 @@ a.celda-principal:hover {
 
 .tabla-control th,
 .tabla-control td {
-  padding: 5px 10px;
-  border: 1px solid #bfbfbf;
+  padding: 8px 12px;
+  border: none;
 }
 
 .tabla-control thead th {
   font-weight: bold;
-  color: #000;
-  background: #bfbfbf;
+  color: #fff;
+  background: #003b70;
 }
 
 .tabla-control tbody th {
   width: 34%;
-  font-weight: bold;
+  font-weight: normal;
   color: #595959;
 }
 
 .tabla-control td {
-  color: #595959;
+  color: #404040;
 }
 
 .tabla-control tbody tr:nth-child(odd) {
-  background: #f2f2f2;
+  background: #f3f6f9;
 }
 
 .hoja-seccion-titulo {
@@ -1195,4 +1197,173 @@ a.celda-principal:hover {
   max-width: 6rem;
   max-height: 2.5rem;
   object-fit: contain;
+}
+
+/* ===== Revisión y SLA ===== */
+.pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.pestana {
+  padding: 0.45rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: var(--color-texto-suave);
+  background: #eef1f5;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.pestana[aria-selected="true"] {
+  font-weight: bold;
+  color: #fff;
+  background: var(--color-primario);
+}
+
+.pestana-alerta:not([aria-selected="true"]) {
+  color: var(--color-critico);
+  border-color: #f2b8b0;
+}
+
+/* RNF6: documentos con SLA crítico en rojo y negrita */
+.sla-critico,
+.fila-critica td,
+.fila-critica a.celda-principal {
+  font-weight: bold;
+  color: var(--color-critico);
+}
+
+.fila-critica td {
+  background: #fff5f4;
+}
+
+.celda-sla {
+  white-space: nowrap;
+}
+
+.franja-estado {
+  margin-bottom: 1.25rem;
+  border-left: 5px solid var(--color-acento);
+}
+
+.franja-critica {
+  background: #fff5f4;
+  border-left-color: var(--color-critico);
+}
+
+.franja-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.franja-etiqueta {
+  font-weight: bold;
+}
+
+.franja-texto,
+.franja-plazo {
+  margin: 0.6rem 0 0;
+}
+
+.franja-estado .boton {
+  width: auto;
+  margin-top: 0.8rem;
+}
+
+.panel-revision {
+  margin-bottom: 1.25rem;
+  border-left: 5px solid var(--color-primario);
+}
+
+.acciones-revision {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.acciones-revision .boton {
+  width: auto;
+}
+
+.boton-aprobar {
+  background: var(--color-ok);
+}
+
+.boton-aprobar:hover {
+  background: #23652a;
+}
+
+.boton-rechazar {
+  background: var(--color-critico);
+}
+
+.boton-rechazar:hover {
+  background: #a31f1f;
+}
+
+.opcion-confidencial {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-borde);
+  white-space: normal;
+}
+
+/* Notificaciones */
+.notificaciones {
+  margin-top: 1.25rem;
+}
+
+.encabezado-notificaciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.encabezado-notificaciones h3 {
+  margin: 0;
+  color: var(--color-primario);
+}
+
+.lista-notificaciones {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-notificaciones li {
+  padding: 0.6rem 0.25rem;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.lista-notificaciones li:last-child {
+  border-bottom: none;
+}
+
+.lista-notificaciones a {
+  color: var(--color-texto);
+  text-decoration: none;
+}
+
+.lista-notificaciones a:hover {
+  text-decoration: underline;
+}
+
+.lista-notificaciones li.no-leida a {
+  font-weight: bold;
+  color: var(--color-primario);
+}
+
+@media print {
+  #estado-documento,
+  #panel-revision {
+    display: none !important;
+  }
 }

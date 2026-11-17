@@ -9,12 +9,19 @@ const SELECT_DOCUMENTO = `
          c.id_cliente, c.nombre_cliente, (c.logo_ruta IS NOT NULL) AS cliente_tiene_logo,
          d.id_estado, e.nombre_estado, e.permite_edicion_autor,
          d.id_autor, CONCAT(u.nombre, ' ', u.apellido) AS autor,
-         (SELECT COUNT(*) FROM historial_sla h WHERE h.id_documento = d.id_documento) AS revision
+         (SELECT COUNT(*) FROM historial_sla h WHERE h.id_documento = d.id_documento) AS revision,
+         -- Corrección abierta (SLA vigente); la fecha límite se calcula, no se almacena (3FN)
+         hs.id_sla AS sla_id, hs.num_iteracion AS sla_iteracion, hs.motivo_correccion AS sla_motivo,
+         (hs.fecha_extension IS NOT NULL) AS sla_extension_usada,
+         DATE_ADD(hs.fecha_inicio, INTERVAL (hs.horas_plazo + hs.horas_extension) HOUR) AS sla_fecha_limite,
+         TIMESTAMPDIFF(SECOND, NOW(), DATE_ADD(hs.fecha_inicio, INTERVAL (hs.horas_plazo + hs.horas_extension) HOUR))
+           AS sla_segundos_restantes
     FROM documentos d
     JOIN plantillas p        ON p.id_plantilla = d.id_plantilla
     JOIN clientes c          ON c.id_cliente = p.id_cliente
     JOIN estados_documento e ON e.id_estado = d.id_estado
-    JOIN usuarios u          ON u.id_usuario = d.id_autor`;
+    JOIN usuarios u          ON u.id_usuario = d.id_autor
+    LEFT JOIN historial_sla hs ON hs.id_documento = d.id_documento AND hs.fecha_cierre IS NULL`;
 
 async function buscarPorId(idDocumento, conn = pool) {
   const [filas] = await conn.execute(`${SELECT_DOCUMENTO} WHERE d.id_documento = ?`, [idDocumento]);
@@ -24,7 +31,8 @@ async function buscarPorId(idDocumento, conn = pool) {
 /** Bloquea la fila del documento hasta el fin de la transacción (evita cambios simultáneos). */
 async function bloquearParaActualizar(conn, idDocumento) {
   const [filas] = await conn.execute(
-    `SELECT d.id_documento, d.id_autor, d.id_estado, d.id_plantilla, e.nombre_estado, e.permite_edicion_autor
+    `SELECT d.id_documento, d.codigo_documento, d.titulo, d.es_confidencial, d.id_autor, d.id_estado,
+            d.id_plantilla, e.nombre_estado, e.permite_edicion_autor
        FROM documentos d JOIN estados_documento e ON e.id_estado = d.id_estado
       WHERE d.id_documento = ? FOR UPDATE`,
     [idDocumento]
@@ -37,6 +45,30 @@ async function listarDelAutor(idAutor) {
     idAutor,
   ]);
   return filas;
+}
+
+/** Documentos que no son borradores (para el Administrador), opcionalmente filtrados por estado. */
+async function listarParaRevision(nombreEstado = null) {
+  const filtro = nombreEstado ? 'AND e.nombre_estado = ?' : '';
+  const [filas] = await pool.execute(
+    `${SELECT_DOCUMENTO} WHERE e.nombre_estado <> 'Borrador' ${filtro}
+      ORDER BY (e.nombre_estado = 'En Revisión') DESC, d.fecha_actualizacion DESC`,
+    nombreEstado ? [nombreEstado] : []
+  );
+  return filas;
+}
+
+async function contarPorEstado() {
+  const [filas] = await pool.execute(
+    `SELECT e.nombre_estado, COUNT(d.id_documento) AS total
+       FROM estados_documento e LEFT JOIN documentos d ON d.id_estado = e.id_estado
+      GROUP BY e.id_estado, e.nombre_estado`
+  );
+  return Object.fromEntries(filas.map((f) => [f.nombre_estado, Number(f.total)]));
+}
+
+async function cambiarConfidencialidad(conn, idDocumento, valor) {
+  await conn.execute('UPDATE documentos SET es_confidencial = ? WHERE id_documento = ?', [valor ? 1 : 0, idDocumento]);
 }
 
 async function listarContenido(idDocumento) {
@@ -150,12 +182,6 @@ async function registrarAuditoria(conn, { idDocumento, idUsuario, idTipoEvento, 
   return r.insertId;
 }
 
-async function cerrarSlaAbierto(conn, idDocumento) {
-  await conn.execute('UPDATE historial_sla SET fecha_cierre = NOW() WHERE id_documento = ? AND fecha_cierre IS NULL', [
-    idDocumento,
-  ]);
-}
-
 module.exports = {
   buscarPorId,
   bloquearParaActualizar,
@@ -171,5 +197,7 @@ module.exports = {
   eliminarImagen,
   buscarImagen,
   registrarAuditoria,
-  cerrarSlaAbierto,
+  listarParaRevision,
+  contarPorEstado,
+  cambiarConfidencialidad,
 };

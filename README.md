@@ -86,6 +86,7 @@ Los plazos del SLA son configurables desde `.env` y se leen solo desde `src/conf
 | `SLA_HORAS_UMBRAL_EXTENSION` | 2 | RNF7: tiempo restante para poder pedir la extensión |
 | `SLA_HORAS_EXTENSION` | 2 | RNF7: horas que agrega la extensión única |
 | `SLA_HORAS_UMBRAL_CRITICO` | 2 | RNF6: tiempo restante para marcar la fila como crítica |
+| `SLA_SEGUNDOS_REVISION` | 60 | RF9: frecuencia con que el servidor revisa los plazos vencidos |
 
 ## Estado de avance
 
@@ -97,6 +98,8 @@ Los plazos del SLA son configurables desde `.env` y se leen solo desde `src/conf
 - [x] Documentos en hojas tamaño carta con el formato de GEN BackOffice (portada, control documental, encabezado con logos, pie con número de página) e impresión / PDF
 - [ ] Gestión de cuentas de usuario
 - [x] Envío a revisión con bloqueo de edición y registro de auditoría (RF4, RNF8)
-- [ ] Revisión del Administrador, SLA y bloqueo automático (RF7, RF8, RF9)
+- [x] Revisión del Administrador: aprobar, devolver a corrección con motivo, rehabilitar bloqueados y confidencialidad (RF7, RNF4)
+- [x] SLA: plazo de 24 h por corrección, extensión única de 2 h, filas críticas en rojo y bloqueo automático por tarea programada (RF8, RF9, RNF6, RNF7)
+- [x] Notificaciones y bitácora de auditoría en cada cambio de estado (RNF8)
 - [ ] Dashboard y buscador (RF6, RF10)
 - [ ] Despliegue en hosting

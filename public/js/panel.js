@@ -4,7 +4,7 @@
   const MENUS = {
     Administrador: [
       { id: 'dashboard', texto: 'Dashboard', url: '/admin' },
-      { id: 'revision', texto: 'Revisión', url: '#' },
+      { id: 'revision', texto: 'Revisión', url: '/admin/revision' },
       { id: 'plantillas', texto: 'Plantillas', url: '/admin/plantillas' },
       { id: 'clientes', texto: 'Clientes', url: '/admin/clientes' },
       { id: 'documentos', texto: 'Documentos', url: '#' },
@@ -63,6 +63,30 @@
     return elemento('span', `insignia ${CLASES_ESTADO[nombreEstado] || ''}`, texto);
   }
 
+  /** Tiempo restante del SLA en texto: "23 h 15 min", "45 min" o "Vencido". */
+  function formatoRestante(segundos) {
+    if (segundos === null || segundos === undefined) return '';
+    if (segundos <= 0) return 'Vencido';
+    const horas = Math.floor(segundos / 3600);
+    const minutos = Math.floor((segundos % 3600) / 60);
+    if (horas === 0) return `${Math.max(minutos, 1)} min`;
+    return `${horas} h ${String(minutos).padStart(2, '0')} min`;
+  }
+
+  /** Celda con el plazo SLA; en rojo y negrita si es crítico (RNF6). */
+  function celdaSla(documento) {
+    const celda = elemento('td', 'celda-sla');
+    if (!documento.sla) {
+      celda.textContent = '—';
+      return celda;
+    }
+    const s = documento.sla;
+    celda.textContent = formatoRestante(s.segundosRestantes);
+    if (s.critico || s.segundosRestantes <= 0) celda.classList.add('sla-critico');
+    if (s.extensionUsada) celda.append(elemento('span', 'texto-secundario', 'Extensión usada'));
+    return celda;
+  }
+
   function mostrarAviso(contenedor, texto, tipo = 'exito') {
     contenedor.textContent = texto;
     contenedor.className = `aviso visible aviso-${tipo}`;
@@ -108,5 +132,5 @@
     }
   });
 
-  window.ArgusNexus = { api, elemento, formatoFecha, insigniaEstado, mostrarAviso, sesion };
+  window.ArgusNexus = { api, elemento, formatoFecha, formatoRestante, celdaSla, insigniaEstado, mostrarAviso, sesion };
 })();

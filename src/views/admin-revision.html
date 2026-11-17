@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revisión | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body data-menu="revision">
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
+
+  <main class="panel-contenido">
+    <div class="encabezado-seccion">
+      <div>
+        <h2>Revisión</h2>
+        <p class="texto-suave">Aprueba o devuelve a corrección los documentos enviados por el equipo y controla sus plazos SLA.</p>
+      </div>
+    </div>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <section class="tarjeta">
+      <div class="pestanas" role="tablist" aria-label="Filtrar por estado" id="pestanas"></div>
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Código</th>
+              <th scope="col">Documento</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Plazo SLA</th>
+              <th scope="col">Actualizado</th>
+              <th scope="col"><span class="solo-lectores">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
+      </div>
+      <p id="tabla-vacia" class="texto-suave tabla-vacia" hidden>No hay documentos en este estado.</p>
+    </section>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+  <script src="/js/revision.js" defer></script>
+</body>
+</html>

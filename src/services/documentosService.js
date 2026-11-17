@@ -14,6 +14,9 @@ const archivos = require('../config/archivos');
 const documentosRepo = require('../repositories/documentosRepo');
 const plantillasRepo = require('../repositories/plantillasRepo');
 const catalogos = require('../repositories/catalogosRepo');
+const slaRepo = require('../repositories/slaRepo');
+const notificacionesRepo = require('../repositories/notificacionesRepo');
+const slaConfig = require('../config/sla');
 const { ROLES } = require('./authService');
 const { ErrorNegocio } = require('./errores');
 
@@ -47,6 +50,46 @@ function puedeEnviar(usuario, documento) {
   );
 }
 
+/**
+ * Estado del SLA de un documento En Corrección (RNF6 y RNF7).
+ *   critico: le quedan menos de SLA_HORAS_UMBRAL_CRITICO horas
+ *   puedeExtender: le quedan menos de SLA_HORAS_UMBRAL_EXTENSION horas y aún no usó la extensión única
+ */
+function resumenSla(documento) {
+  if (!documento.sla_id || documento.nombre_estado !== ESTADOS.EN_CORRECCION) return null;
+  const restantes = Number(documento.sla_segundos_restantes);
+  return {
+    iteracion: documento.sla_iteracion,
+    motivo: documento.sla_motivo,
+    fechaLimite: documento.sla_fecha_limite,
+    segundosRestantes: restantes,
+    extensionUsada: Boolean(documento.sla_extension_usada),
+    critico: restantes > 0 && restantes < slaConfig.horasUmbralCritico * 3600,
+    puedeExtender:
+      !documento.sla_extension_usada && restantes > 0 && restantes < slaConfig.horasUmbralExtension * 3600,
+    horasExtension: slaConfig.horasExtension,
+  };
+}
+
+function permisosDe(usuario, documento, sla) {
+  const admin = esAdmin(usuario);
+  const autor = documento.id_autor === usuario.id;
+  return {
+    editar: puedeEditar(usuario, documento),
+    enviar: puedeEnviar(usuario, documento),
+    extender: !admin && autor && Boolean(sla && sla.puedeExtender),
+    revisar: admin && documento.nombre_estado === ESTADOS.EN_REVISION, // aprobar o rechazar
+    habilitar: admin && documento.nombre_estado === ESTADOS.BLOQUEADO_SLA, // RF7
+    confidencialidad: admin,
+  };
+}
+
+/** Datos de un documento listos para la interfaz (SLA y permisos según quién consulta). */
+function preparar(usuario, documento) {
+  const sla = resumenSla(documento);
+  return { ...documento, sla, permisos: permisosDe(usuario, documento, sla) };
+}
+
 // ---------------------------------------------------------------- consultas
 
 async function obtenerVisible(usuario, idDocumento) {
@@ -59,19 +102,17 @@ async function obtenerVisible(usuario, idDocumento) {
 async function obtenerCompleto(usuario, idDocumento) {
   const documento = await obtenerVisible(usuario, idDocumento);
   const secciones = await documentosRepo.listarContenido(idDocumento);
-  return {
-    ...documento,
-    secciones,
-    permisos: { editar: puedeEditar(usuario, documento), enviar: puedeEnviar(usuario, documento) },
-  };
+  return { ...preparar(usuario, documento), secciones };
 }
 
 async function listarMios(usuario) {
   const documentos = await documentosRepo.listarDelAutor(usuario.id);
-  return documentos.map((d) => ({
-    ...d,
-    permisos: { editar: puedeEditar(usuario, d), enviar: puedeEnviar(usuario, d) },
-  }));
+  return documentos.map((d) => preparar(usuario, d));
+}
+
+async function listarParaRevision(usuario, estado) {
+  const documentos = await documentosRepo.listarParaRevision(estado || null);
+  return { documentos: documentos.map((d) => preparar(usuario, d)), totales: await documentosRepo.contarPorEstado() };
 }
 
 /** Ruta en disco de una imagen, solo si el usuario puede ver su documento. */
@@ -232,6 +273,7 @@ async function confirmar({ usuario, sesion, token }) {
         if (!actual.permite_edicion_autor) {
           throw new ErrorNegocio(`El documento está "${actual.nombre_estado}" y ya no se puede editar.`, 409);
         }
+        await verificarPlazo(conn, actual);
         await documentosRepo.actualizarTitulo(conn, idDocumento, previa.titulo);
       } else {
         const codigo = await documentosRepo.siguienteCodigo(conn, new Date().getFullYear());
@@ -311,24 +353,45 @@ async function enviarARevision(usuario, idDocumento) {
       throw new ErrorNegocio(`Un documento "${actual.nombre_estado}" no se puede enviar a revisión.`, 409);
     }
 
+    await verificarPlazo(conn, actual);
+
     const idEnRevision = await catalogos.estadoId(ESTADOS.EN_REVISION);
     await documentosRepo.cambiarEstado(conn, idDocumento, idEnRevision);
-    if (actual.nombre_estado === ESTADOS.EN_CORRECCION) await documentosRepo.cerrarSlaAbierto(conn, idDocumento);
+    if (actual.nombre_estado === ESTADOS.EN_CORRECCION) await slaRepo.cerrar(conn, idDocumento);
 
+    const reenvio = actual.nombre_estado === ESTADOS.EN_CORRECCION;
     const idEvento = await documentosRepo.registrarAuditoria(conn, {
       idDocumento,
       idUsuario: usuario.id,
       idTipoEvento: await catalogos.tipoEventoId(EVENTOS.ENVIO_REVISION),
       idEstadoResultante: idEnRevision,
-      detalle: actual.nombre_estado === ESTADOS.EN_CORRECCION ? 'Reenvío tras corrección' : 'Primer envío a revisión',
+      detalle: reenvio ? 'Reenvío tras corrección' : 'Primer envío a revisión',
+    });
+    await notificacionesRepo.crearParaAdministradores(conn, {
+      idDocumento,
+      mensaje: `${actual.codigo_documento} «${actual.titulo}» ${reenvio ? 'fue corregido y reenviado' : 'fue enviado'} a revisión.`,
     });
     return { idEvento };
   });
 }
 
+/**
+ * Un documento En Corrección con el plazo vencido ya no se puede editar ni reenviar,
+ * aunque la tarea programada todavía no lo haya bloqueado (se revisa cada minuto).
+ */
+async function verificarPlazo(conn, actual) {
+  if (actual.nombre_estado !== ESTADOS.EN_CORRECCION) return;
+  const sla = await slaRepo.vigente(actual.id_documento, conn, true);
+  if (sla && Number(sla.segundos_restantes) <= 0) {
+    throw new ErrorNegocio('El plazo de corrección venció. El documento será bloqueado; contacta al administrador.', 409);
+  }
+}
+
 module.exports = {
   obtenerCompleto,
   listarMios,
+  listarParaRevision,
+  preparar,
   rutaImagenVisible,
   previsualizar,
   confirmar,

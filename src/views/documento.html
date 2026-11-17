@@ -27,6 +27,24 @@
 
     <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
 
+    <!-- Estado del documento y, si corresponde, plazo de corrección (RNF7) -->
+    <section id="estado-documento" class="tarjeta franja-estado" hidden></section>
+
+    <!-- Panel del Administrador: aprobar, rechazar, habilitar y confidencialidad -->
+    <section id="panel-revision" class="tarjeta panel-revision" hidden>
+      <h3 class="titulo-bloque">Revisión del administrador</h3>
+      <div id="error-revision" class="mensaje-error" role="alert"></div>
+      <div class="campo" id="campo-motivo" hidden>
+        <label for="motivo">Motivo de la corrección *</label>
+        <textarea id="motivo" rows="3" maxlength="255"
+                  placeholder="Indica qué debe corregir el autor (se le notificará y quedará en la auditoría)"></textarea>
+      </div>
+      <div class="acciones-revision" id="acciones-revision"></div>
+      <label class="opcion opcion-confidencial">
+        <input type="checkbox" id="confidencial"> Documento confidencial (solo visible para Administradores)
+      </label>
+    </section>
+
     <div id="hoja"><p class="texto-suave">Cargando documento…</p></div>
   </main>
 
