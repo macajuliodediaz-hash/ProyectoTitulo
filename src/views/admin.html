@@ -20,25 +20,101 @@
   <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
 
   <main class="panel-contenido">
-    <h2>Dashboard</h2>
-    <p class="texto-suave">Panel de revisión y control de GEN BackOffice.</p>
+    <div class="encabezado-seccion">
+      <div>
+        <h2>Dashboard</h2>
+        <p class="texto-suave">Estado documental, plazos SLA y métricas de corrección de GEN BackOffice.</p>
+      </div>
+      <a href="/admin/revision" class="boton boton-accion">Ir a revisión</a>
+    </div>
 
-    <section class="grilla-tarjetas">
-      <article class="tarjeta">
-        <h3>Documentos pendientes</h3>
-        <p>Documentos En Revisión que esperan aprobación o rechazo.</p>
-      </article>
-      <article class="tarjeta">
-        <h3>SLA críticos</h3>
-        <p>Correcciones con menos de 2 horas para vencer.</p>
-      </article>
-      <article class="tarjeta">
-        <h3>Métricas de corrección</h3>
-        <p>Iteraciones y tasa de rechazo por cliente.</p>
-      </article>
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <!-- Contadores principales -->
+    <section class="grilla-contadores">
+      <a class="tarjeta contador contador-enlace" href="/admin/revision?estado=En%20Revisi%C3%B3n">
+        <p class="contador-numero" id="c-pendientes">–</p>
+        <h3>Pendientes de revisión</h3>
+        <p>Esperan aprobación o corrección.</p>
+      </a>
+      <a class="tarjeta contador contador-enlace" href="/admin/revision?estado=En%20Correcci%C3%B3n">
+        <p class="contador-numero" id="c-correccion">–</p>
+        <h3>En corrección</h3>
+        <p>Con plazo SLA vigente.</p>
+      </a>
+      <a class="tarjeta contador contador-enlace contador-alerta" href="/admin/revision?estado=En%20Correcci%C3%B3n">
+        <p class="contador-numero" id="c-criticos">–</p>
+        <h3 id="t-criticos">SLA críticos</h3>
+        <p>Por vencer o vencidos.</p>
+      </a>
+      <a class="tarjeta contador contador-enlace contador-alerta" href="/admin/revision?estado=Bloqueado_SLA">
+        <p class="contador-numero" id="c-bloqueados">–</p>
+        <h3>Bloqueados por SLA</h3>
+        <p>Requieren habilitación.</p>
+      </a>
+      <a class="tarjeta contador contador-enlace contador-ok" href="/admin/revision?estado=Aprobado">
+        <p class="contador-numero" id="c-aprobados">–</p>
+        <h3>Aprobados</h3>
+        <p>Con aprobación final.</p>
+      </a>
     </section>
+
+    <div class="grilla-dashboard">
+      <!-- Distribución por estado -->
+      <section class="tarjeta">
+        <h3 class="titulo-bloque">Documentos por estado</h3>
+        <div id="barras-estado" class="barras"></div>
+      </section>
+
+      <!-- Almacenamiento -->
+      <section class="tarjeta">
+        <h3 class="titulo-bloque">Estado de almacenamiento</h3>
+        <dl class="datos-fijos datos-almacenamiento" id="almacenamiento"></dl>
+      </section>
+    </div>
+
+    <!-- SLA críticos -->
+    <section class="tarjeta bloque">
+      <h3 class="titulo-bloque">Plazos críticos</h3>
+      <ul id="lista-criticos" class="lista-notificaciones"></ul>
+      <p id="sin-criticos" class="texto-suave" hidden>No hay plazos críticos en este momento.</p>
+    </section>
+
+    <!-- Métricas por cliente -->
+    <section class="tarjeta bloque">
+      <div class="encabezado-notificaciones">
+        <h3>Métricas de corrección del mes</h3>
+        <button type="button" id="boton-recalcular" class="boton-enlace">Recalcular ahora</button>
+      </div>
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Cliente</th>
+              <th scope="col">Emitidos</th>
+              <th scope="col">Devueltos a corrección</th>
+              <th scope="col">Tasa de rechazo</th>
+              <th scope="col">SLA cumplidos</th>
+              <th scope="col">SLA incumplidos</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-metricas"></tbody>
+        </table>
+      </div>
+      <p class="texto-ayuda" id="nota-metricas"></p>
+    </section>
+
+    <!-- Actividad reciente -->
+    <section class="tarjeta bloque">
+      <h3 class="titulo-bloque">Actividad reciente (bitácora de auditoría)</h3>
+      <ul id="lista-actividad" class="lista-notificaciones"></ul>
+      <p id="sin-actividad" class="texto-suave" hidden>Aún no hay actividad registrada.</p>
+    </section>
+
+    <p class="texto-ayuda" id="tiempo-respuesta"></p>
   </main>
 
   <script src="/js/panel.js" defer></script>
+  <script src="/js/dashboard.js" defer></script>
 </body>
 </html>

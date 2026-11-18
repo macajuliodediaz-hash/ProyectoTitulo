@@ -7,6 +7,8 @@ const revisionService = require('../services/revisionService');
 const documentosService = require('../services/documentosService');
 const notificacionesRepo = require('../repositories/notificacionesRepo');
 const catalogos = require('../repositories/catalogosRepo');
+const dashboardService = require('../services/dashboardService');
+const trabajoMetricas = require('../jobs/metricas');
 
 const router = express.Router();
 const soloAdmin = requiereRol(ROLES.ADMIN);
@@ -65,6 +67,21 @@ router.patch(
   accion(async (req, res) => {
     const r = await revisionService.cambiarConfidencialidad(req.session.usuario, idDe(req), req.body.confidencial);
     res.json({ ok: true, ...r, mensaje: req.body.confidencial ? 'Documento marcado como confidencial.' : 'Documento marcado como uso interno.' });
+  })
+);
+
+router.get(
+  '/dashboard',
+  soloAdmin,
+  accion(async (req, res) => res.json(await dashboardService.obtener()))
+);
+
+router.post(
+  '/dashboard/recalcular',
+  soloAdmin,
+  accion(async (req, res) => {
+    await trabajoMetricas.recalcular();
+    res.json({ ok: true, mensaje: 'Métricas recalculadas.' });
   })
 );
 

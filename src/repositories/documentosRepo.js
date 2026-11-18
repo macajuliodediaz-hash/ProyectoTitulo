@@ -58,6 +58,51 @@ async function listarParaRevision(nombreEstado = null) {
   return filas;
 }
 
+/**
+ * Buscador avanzado (RF10). Todos los filtros son opcionales y se combinan (AND).
+ * soloVisiblesPara: id del usuario del perfil Equipo (ve sus documentos y los aprobados
+ * de otros, nunca los confidenciales); null para el Administrador (ve todo).
+ */
+async function buscar({ texto, idCliente, estado, desde, hasta, confidencial, soloVisiblesPara }, limite = 200) {
+  const condiciones = [];
+  const valores = [];
+  if (texto) {
+    const patron = `%${texto.replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
+    condiciones.push('(d.titulo LIKE ? OR d.codigo_documento LIKE ?)');
+    valores.push(patron, patron);
+  }
+  if (idCliente) {
+    condiciones.push('c.id_cliente = ?');
+    valores.push(idCliente);
+  }
+  if (estado) {
+    condiciones.push('e.nombre_estado = ?');
+    valores.push(estado);
+  }
+  if (desde) {
+    condiciones.push('d.fecha_creacion >= ?');
+    valores.push(`${desde} 00:00:00`);
+  }
+  if (hasta) {
+    condiciones.push('d.fecha_creacion < DATE_ADD(?, INTERVAL 1 DAY)');
+    valores.push(hasta);
+  }
+  if (confidencial !== null && confidencial !== undefined) {
+    condiciones.push('d.es_confidencial = ?');
+    valores.push(confidencial ? 1 : 0);
+  }
+  if (soloVisiblesPara) {
+    condiciones.push("d.es_confidencial = 0 AND (d.id_autor = ? OR e.nombre_estado = 'Aprobado')");
+    valores.push(soloVisiblesPara);
+  }
+  const where = condiciones.length ? `WHERE ${condiciones.join(' AND ')}` : '';
+  const [filas] = await pool.execute(
+    `${SELECT_DOCUMENTO} ${where} ORDER BY d.fecha_actualizacion DESC LIMIT ${Number(limite) | 0}`,
+    valores
+  );
+  return filas;
+}
+
 async function contarPorEstado() {
   const [filas] = await pool.execute(
     `SELECT e.nombre_estado, COUNT(d.id_documento) AS total
@@ -198,6 +243,7 @@ module.exports = {
   buscarImagen,
   registrarAuditoria,
   listarParaRevision,
+  buscar,
   contarPorEstado,
   cambiarConfidencialidad,
 };

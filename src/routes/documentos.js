@@ -107,6 +107,14 @@ router.post('/documentos/:id/enviar', soloEquipo, async (req, res, next) => {
 });
 
 // ---- Consulta
+router.get('/buscar', requiereSesion, async (req, res, next) => {
+  try {
+    res.json(await documentosService.buscar(req.session.usuario, req.query));
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/documentos', requiereSesion, async (req, res, next) => {
   try {
     res.json({ documentos: await documentosService.listarMios(req.session.usuario) });

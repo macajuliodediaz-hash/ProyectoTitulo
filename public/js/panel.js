@@ -7,14 +7,15 @@
       { id: 'revision', texto: 'Revisión', url: '/admin/revision' },
       { id: 'plantillas', texto: 'Plantillas', url: '/admin/plantillas' },
       { id: 'clientes', texto: 'Clientes', url: '/admin/clientes' },
-      { id: 'documentos', texto: 'Documentos', url: '#' },
-      { id: 'usuarios', texto: 'Usuarios', url: '#' },
+      { id: 'buscador', texto: 'Documentos', url: '/buscador' },
+      { id: 'usuarios', texto: 'Usuarios', url: '/admin/usuarios' },
+      { id: 'perfil', texto: 'Mi perfil', url: '/perfil' },
     ],
     Equipo: [
       { id: 'tareas', texto: 'Mis tareas', url: '/equipo' },
       { id: 'nuevo', texto: 'Nuevo documento', url: '/equipo/nuevo' },
-      { id: 'repositorio', texto: 'Repositorio', url: '#' },
-      { id: 'perfil', texto: 'Mi perfil', url: '#' },
+      { id: 'buscador', texto: 'Repositorio', url: '/buscador' },
+      { id: 'perfil', texto: 'Mi perfil', url: '/perfil' },
     ],
   };
 

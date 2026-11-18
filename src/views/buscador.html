@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de documentos | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body data-menu="buscador">
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
+
+  <main class="panel-contenido">
+    <h2 id="titulo-pagina">Documentos</h2>
+    <p class="texto-suave" id="descripcion-pagina">Busca documentos por texto, fechas, cliente, estado y confidencialidad.</p>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <form id="form-busqueda" class="tarjeta bloque filtros" role="search" novalidate>
+      <div class="campo campo-texto">
+        <label for="texto">Título o código</label>
+        <input type="search" id="texto" maxlength="100" placeholder="Ej.: bodega o DOC-2026-0001">
+      </div>
+      <div class="campo">
+        <label for="cliente">Cliente</label>
+        <select id="cliente"><option value="">Todos</option></select>
+      </div>
+      <div class="campo">
+        <label for="estado">Estado</label>
+        <select id="estado">
+          <option value="">Todos</option>
+          <option value="Borrador">Borrador</option>
+          <option value="En Revisión">En Revisión</option>
+          <option value="En Corrección">En Corrección</option>
+          <option value="Bloqueado_SLA">Bloqueado (SLA)</option>
+          <option value="Aprobado">Aprobado</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="desde">Creado desde</label>
+        <input type="date" id="desde">
+      </div>
+      <div class="campo">
+        <label for="hasta">Creado hasta</label>
+        <input type="date" id="hasta">
+      </div>
+      <div class="campo" id="campo-confidencialidad" hidden>
+        <label for="confidencialidad">Confidencialidad</label>
+        <select id="confidencialidad">
+          <option value="">Todos</option>
+          <option value="confidencial">Solo confidenciales</option>
+          <option value="interno">Solo uso interno</option>
+        </select>
+      </div>
+      <div class="acciones-filtros">
+        <button type="button" id="boton-limpiar" class="boton-borde">Limpiar</button>
+        <button type="submit" class="boton boton-accion">Buscar</button>
+      </div>
+    </form>
+
+    <section class="tarjeta">
+      <p class="texto-suave resumen-resultados" id="resumen"></p>
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Código</th>
+              <th scope="col">Documento</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Plazo SLA</th>
+              <th scope="col">Creado</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+  <script src="/js/buscador.js" defer></script>
+</body>
+</html>

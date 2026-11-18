@@ -110,6 +110,32 @@ async function listarMios(usuario) {
   return documentos.map((d) => preparar(usuario, d));
 }
 
+const FECHA = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Buscador avanzado (RF10): valida los filtros y aplica la visibilidad según el perfil (RNF4). */
+async function buscar(usuario, consulta) {
+  const texto = String(consulta.texto || '').trim().slice(0, 100);
+  const idCliente = Number(consulta.cliente) || null;
+  const estado = Object.values(ESTADOS).includes(consulta.estado) ? consulta.estado : null;
+  const desde = FECHA.test(consulta.desde || '') ? consulta.desde : null;
+  const hasta = FECHA.test(consulta.hasta || '') ? consulta.hasta : null;
+  if (desde && hasta && desde > hasta) throw new ErrorNegocio('La fecha "desde" no puede ser posterior a la fecha "hasta".');
+  // El filtro de confidencialidad solo aplica al Administrador: el Equipo nunca ve confidenciales.
+  let confidencial = null;
+  if (esAdmin(usuario) && consulta.confidencialidad === 'confidencial') confidencial = true;
+  if (esAdmin(usuario) && consulta.confidencialidad === 'interno') confidencial = false;
+
+  const limite = 200;
+  const documentos = await documentosRepo.buscar(
+    { texto, idCliente, estado, desde, hasta, confidencial, soloVisiblesPara: esAdmin(usuario) ? null : usuario.id },
+    limite + 1
+  );
+  return {
+    documentos: documentos.slice(0, limite).map((d) => preparar(usuario, d)),
+    hayMas: documentos.length > limite,
+  };
+}
+
 async function listarParaRevision(usuario, estado) {
   const documentos = await documentosRepo.listarParaRevision(estado || null);
   return { documentos: documentos.map((d) => preparar(usuario, d)), totales: await documentosRepo.contarPorEstado() };
@@ -391,6 +417,7 @@ module.exports = {
   obtenerCompleto,
   listarMios,
   listarParaRevision,
+  buscar,
   preparar,
   rutaImagenVisible,
   previsualizar,

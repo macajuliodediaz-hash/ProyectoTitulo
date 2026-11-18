@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuarios | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body data-menu="usuarios">
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
+
+  <main class="panel-contenido">
+    <div class="encabezado-seccion">
+      <div>
+        <h2>Usuarios</h2>
+        <p class="texto-suave">Cuentas de acceso del equipo de GEN BackOffice y su perfil (Administrador o Equipo).</p>
+      </div>
+      <button type="button" id="boton-nuevo" class="boton boton-accion">+ Nueva cuenta</button>
+    </div>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <!-- Crear / editar cuenta -->
+    <section id="panel-formulario" class="tarjeta formulario-plantilla" hidden>
+      <h3 id="titulo-formulario">Nueva cuenta</h3>
+      <div id="error-formulario" class="mensaje-error" role="alert"></div>
+      <form id="form-usuario" novalidate>
+        <div class="fila-campos fila-campos-2">
+          <div class="campo">
+            <label for="nombre">Nombre *</label>
+            <input type="text" id="nombre" maxlength="50" required autocomplete="off">
+          </div>
+          <div class="campo">
+            <label for="apellido">Apellido *</label>
+            <input type="text" id="apellido" maxlength="50" required autocomplete="off">
+          </div>
+          <div class="campo">
+            <label for="correo">Correo electrónico *</label>
+            <input type="email" id="correo" maxlength="100" required autocomplete="off">
+          </div>
+          <div class="campo">
+            <label for="rol">Perfil *</label>
+            <select id="rol" required>
+              <option value="Equipo">Equipo</option>
+              <option value="Administrador">Administrador</option>
+            </select>
+          </div>
+          <div class="campo" id="campo-clave">
+            <label for="clave">Contraseña inicial *</label>
+            <input type="password" id="clave" minlength="8" maxlength="72" autocomplete="new-password">
+            <p class="texto-ayuda">Mínimo 8 caracteres, con al menos una letra y un número.</p>
+          </div>
+        </div>
+        <div class="acciones-formulario">
+          <button type="button" id="boton-cancelar" class="boton-borde">Cancelar</button>
+          <button type="submit" id="boton-guardar" class="boton boton-accion">Guardar cuenta</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Restablecer contraseña -->
+    <section id="panel-clave" class="tarjeta formulario-plantilla" hidden>
+      <h3 id="titulo-clave">Restablecer contraseña</h3>
+      <div id="error-clave" class="mensaje-error" role="alert"></div>
+      <form id="form-clave" novalidate>
+        <div class="campo">
+          <label for="nueva-clave">Nueva contraseña *</label>
+          <input type="password" id="nueva-clave" minlength="8" maxlength="72" required autocomplete="new-password">
+          <p class="texto-ayuda">Mínimo 8 caracteres, con al menos una letra y un número. Comunícala al usuario por un medio seguro.</p>
+        </div>
+        <div class="acciones-formulario">
+          <button type="button" id="boton-cancelar-clave" class="boton-borde">Cancelar</button>
+          <button type="submit" id="boton-guardar-clave" class="boton boton-accion">Restablecer</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="tarjeta">
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Perfil</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Último acceso</th>
+              <th scope="col"><span class="solo-lectores">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody id="cuerpo-tabla"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+  <script src="/js/usuarios.js" defer></script>
+</body>
+</html>

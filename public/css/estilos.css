@@ -1367,3 +1367,159 @@ a.celda-principal:hover {
     display: none !important;
   }
 }
+
+/* ===== Usuarios y Mi perfil ===== */
+@media (min-width: 720px) {
+  .fila-campos.fila-campos-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.grilla-perfil {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .grilla-perfil {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ===== Dashboard ===== */
+.grilla-contadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+a.contador-enlace {
+  color: inherit;
+  text-decoration: none;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+a.contador-enlace:hover,
+a.contador-enlace:focus-visible {
+  box-shadow: 0 6px 18px rgba(21, 42, 69, 0.18);
+  transform: translateY(-2px);
+}
+
+.tarjeta.contador-ok .contador-numero {
+  color: var(--color-ok);
+}
+
+.grilla-dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .grilla-dashboard {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+.barras {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.barra-fila {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr 2.5rem;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.barra-pista {
+  height: 1rem;
+  overflow: hidden;
+  background: #eef1f5;
+  border-radius: 999px;
+}
+
+.barra {
+  height: 100%;
+  min-width: 2px;
+  border-radius: 999px;
+}
+
+.barra-valor {
+  font-weight: bold;
+  text-align: right;
+}
+
+.barra-borrador { background: #9aa5b4; }
+.barra-revision { background: #d69e2e; }
+.barra-correccion { background: #e8692c; }
+.barra-bloqueado { background: var(--color-critico); }
+.barra-aprobado { background: var(--color-ok); }
+
+.datos-almacenamiento {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.datos-almacenamiento dd {
+  font-size: 1.15rem;
+  color: var(--color-primario);
+}
+
+/* ===== Buscador ===== */
+.filtros {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 1rem;
+  align-items: end;
+}
+
+@media (min-width: 640px) {
+  .filtros {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 980px) {
+  .filtros {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .filtros .campo-texto {
+    grid-column: span 2;
+  }
+}
+
+.acciones-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  grid-column: 1 / -1;
+}
+
+.acciones-filtros .boton {
+  width: auto;
+}
+
+.campo input[type="date"],
+.campo input[type="search"] {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-texto);
+  background: #fff;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+}
+
+.resumen-resultados {
+  margin: 0 0 0.75rem;
+}

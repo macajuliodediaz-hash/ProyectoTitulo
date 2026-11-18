@@ -4,6 +4,7 @@ const { pool } = require('./config/db');
 const app = require('./app');
 const { limpiarTemporales } = require('./config/archivos');
 const temporizadorSla = require('./jobs/temporizadorSla');
+const trabajoMetricas = require('./jobs/metricas');
 
 async function iniciar() {
   try {
@@ -22,7 +23,10 @@ async function iniciar() {
   // Bloqueo automático de documentos con el plazo de corrección vencido (RF9)
   temporizadorSla.iniciar();
 
-  app.listen(config.puerto, () => {
+  // Instantánea de métricas mensuales para el Dashboard (RNF3)
+  trabajoMetricas.iniciar();
+
+  app.listen(config.puerto, config.host, () => {
     console.log(`ArgusNexus disponible en http://localhost:${config.puerto}`);
   });
 }

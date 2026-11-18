@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi perfil | ArgusNexus</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body data-menu="perfil">
+
+  <header class="panel-cabecera">
+    <h1 class="panel-marca">ArgusNexus</h1>
+    <div class="panel-usuario">
+      <span id="usuario-nombre"></span>
+      <span id="usuario-rol" class="etiqueta-rol"></span>
+      <button type="button" id="boton-salir" class="boton-secundario">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <nav class="panel-navegacion" id="menu" aria-label="Menú principal"></nav>
+
+  <main class="panel-contenido">
+    <h2>Mi perfil</h2>
+    <p class="texto-suave">Revisa tus datos de acceso y cambia tu contraseña.</p>
+
+    <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+    <div class="grilla-perfil">
+      <section class="tarjeta">
+        <h3 class="titulo-bloque">Mis datos</h3>
+        <div id="error-datos" class="mensaje-error" role="alert"></div>
+        <form id="form-datos" novalidate>
+          <div class="campo">
+            <label for="nombre">Nombre *</label>
+            <input type="text" id="nombre" maxlength="50" required autocomplete="given-name">
+          </div>
+          <div class="campo">
+            <label for="apellido">Apellido *</label>
+            <input type="text" id="apellido" maxlength="50" required autocomplete="family-name">
+          </div>
+          <dl class="datos-fijos">
+            <div><dt>Correo</dt><dd id="correo"></dd></div>
+            <div><dt>Perfil</dt><dd id="rol"></dd></div>
+            <div><dt>Cuenta creada</dt><dd id="creada"></dd></div>
+          </dl>
+          <p class="texto-ayuda">El correo y el perfil solo los puede cambiar un Administrador.</p>
+          <div class="acciones-formulario">
+            <button type="submit" id="boton-datos" class="boton boton-accion">Guardar datos</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="tarjeta">
+        <h3 class="titulo-bloque">Cambiar contraseña</h3>
+        <div id="error-clave" class="mensaje-error" role="alert"></div>
+        <form id="form-clave" novalidate>
+          <div class="campo">
+            <label for="clave-actual">Contraseña actual *</label>
+            <input type="password" id="clave-actual" required autocomplete="current-password">
+          </div>
+          <div class="campo">
+            <label for="clave-nueva">Nueva contraseña *</label>
+            <input type="password" id="clave-nueva" minlength="8" maxlength="72" required autocomplete="new-password">
+            <p class="texto-ayuda">Mínimo 8 caracteres, con al menos una letra y un número.</p>
+          </div>
+          <div class="campo">
+            <label for="clave-confirmacion">Repite la nueva contraseña *</label>
+            <input type="password" id="clave-confirmacion" minlength="8" maxlength="72" required autocomplete="new-password">
+          </div>
+          <div class="acciones-formulario">
+            <button type="submit" id="boton-clave" class="boton boton-accion">Cambiar contraseña</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="/js/panel.js" defer></script>
+  <script src="/js/perfil.js" defer></script>
+</body>
+</html>

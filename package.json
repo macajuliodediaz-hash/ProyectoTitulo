@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "seed": "node scripts/crear-usuarios-prueba.js",
-    "demo": "node scripts/datos-demo.js"
+    "demo": "node scripts/datos-demo.js",
+    "instalar-bd": "node scripts/instalar-bd.js"
   },
   "engines": {
     "node": ">=18"

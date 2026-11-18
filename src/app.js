@@ -9,6 +9,7 @@ const rutasPlantillas = require('./routes/plantillas');
 const rutasDocumentos = require('./routes/documentos');
 const rutasClientes = require('./routes/clientes');
 const rutasRevision = require('./routes/revision');
+const rutasUsuarios = require('./routes/usuarios');
 const { ErrorNegocio } = require('./services/errores');
 
 const app = express();
@@ -47,6 +48,7 @@ app.use('/api', rutasClientes);
 app.use('/api', rutasPlantillas);
 app.use('/api', rutasDocumentos);
 app.use('/api', rutasRevision);
+app.use('/api', rutasUsuarios);
 app.use(rutasPaginas);
 app.use(express.static(path.join(__dirname, '..', 'public')));
 

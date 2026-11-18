@@ -26,6 +26,8 @@ const produccion = process.env.NODE_ENV === 'production';
 module.exports = {
   produccion,
   puerto: numero('PORT', 3000),
+  // En el hosting (alwaysdata) la app debe escuchar en la IP y el puerto que entrega el servicio
+  host: process.env.IP || process.env.HOST || undefined,
 
   db: {
     host: requerida('DB_HOST'),
