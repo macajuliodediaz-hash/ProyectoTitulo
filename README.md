@@ -59,11 +59,11 @@ argusnexus/
 ## Despliegue (alwaysdata, plan gratuito)
 
 1. Crear la cuenta en [alwaysdata.com](https://www.alwaysdata.com) con el plan **Free**.
-2. **Bases de datos → MySQL**: crear una base (por ejemplo `usuario_argusnexus`) y anotar el servidor
+2. **Bases de datos → MySQL**: crear una base (por ejemplo `argusnexus_db`) y anotar el servidor
    (`mysql-usuario.alwaysdata.net`), el usuario y la contraseña.
 3. **Acceso remoto → SSH**: activar el acceso y conectarse; luego clonar el repositorio:
    ```bash
-   git clone https://github.com/<usuario>/argusnexus.git
+   git clone https://github.com/macajuliodediaz-hash/ProyectoTitulo.git argusnexus
    cd argusnexus && npm install --omit=dev
    ```
 4. Crear el archivo `.env` en el servidor (a partir de `.env.example`) con `NODE_ENV=production`,

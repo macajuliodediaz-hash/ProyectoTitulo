@@ -15,26 +15,39 @@ const { db } = require('../src/config/env');
 const argumentos = process.argv.slice(2);
 const CARPETA = path.join(__dirname, '..', 'database');
 
-/** Divide un script SQL en sentencias, respetando los bloques DELIMITER de los triggers. */
+/** Quita las líneas de comentario (--) del inicio de una sentencia. */
+function sinComentariosIniciales(sentencia) {
+  return sentencia.replace(/^(\s*--[^\n]*\n)+/, '').trim();
+}
+
+/**
+ * Divide un script SQL en sentencias, respetando los bloques DELIMITER de los triggers.
+ * Omite las sentencias CREATE DATABASE y USE completas (aunque ocupen varias líneas),
+ * porque en el hosting la base ya existe y tiene otro nombre.
+ */
 function sentencias(sql) {
   const resultado = [];
   let delimitador = ';';
   let actual = '';
+  const agregar = (texto) => {
+    const sentencia = sinComentariosIniciales(texto);
+    if (!sentencia) return; // solo comentarios
+    if (/^(CREATE\s+DATABASE|USE)\b/i.test(sentencia)) return; // la base la crea el hosting
+    resultado.push(sentencia);
+  };
   for (const linea of sql.split(/\r?\n/)) {
     const cambio = /^\s*DELIMITER\s+(\S+)\s*$/i.exec(linea);
     if (cambio) {
       delimitador = cambio[1];
       continue;
     }
-    if (/^\s*(CREATE DATABASE|USE)\b/i.test(linea)) continue; // la base la crea el hosting
     actual += `${linea}\n`;
     if (actual.trimEnd().endsWith(delimitador)) {
-      const sentencia = actual.trimEnd().slice(0, -delimitador.length).trim();
-      if (sentencia && !/^(--[^\n]*\n?\s*)+$/.test(`${sentencia}\n`)) resultado.push(sentencia);
+      agregar(actual.trimEnd().slice(0, -delimitador.length));
       actual = '';
     }
   }
-  if (actual.trim()) resultado.push(actual.trim());
+  if (actual.trim()) agregar(actual);
   return resultado;
 }
 
