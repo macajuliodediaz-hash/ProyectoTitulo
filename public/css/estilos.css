@@ -1523,3 +1523,104 @@ a.contador-enlace:focus-visible {
 .resumen-resultados {
   margin: 0 0 0.75rem;
 }
+
+/* ===== Botón de acción con ícono y ayuda al pasar el cursor ===== */
+.boton-icono-accion {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+  color: var(--color-acento);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.boton-icono-accion:hover,
+.boton-icono-accion:focus-visible {
+  background: #eef2fb;
+  border-color: #c9d6f2;
+}
+
+.boton-icono-accion:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 1px;
+}
+
+/* Ayuda visual inmediata (además del title nativo del navegador) */
+.boton-icono-accion[data-ayuda]::after {
+  content: attr(data-ayuda);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  z-index: 10;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #fff;
+  background: var(--color-primario);
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.boton-icono-accion[data-ayuda]:hover::after,
+.boton-icono-accion[data-ayuda]:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Mi perfil: el correo ocupa una fila completa; Perfil y Cuenta creada van debajo */
+.datos-perfil {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.datos-perfil .dato-completo {
+  grid-column: 1 / -1;
+}
+
+.datos-perfil dd {
+  overflow-wrap: anywhere;
+}
+
+/* ===== Dashboard: recuadros del mismo ancho y alto, alineados entre filas =====
+   Ambas filas usan la misma grilla de 5 columnas y el mismo espacio entre recuadros:
+   abajo, "Documentos por estado" ocupa 3 columnas y "Almacenamiento" 2. */
+.grilla-contadores,
+.grilla-dashboard {
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.grilla-contadores > .tarjeta,
+.grilla-dashboard > .tarjeta {
+  margin: 0; /* anula el margen entre tarjetas consecutivas, que desalineaba la fila */
+}
+
+.grilla-contadores > .tarjeta {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .grilla-contadores,
+  .grilla-dashboard {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .grilla-dashboard > :first-child {
+    grid-column: span 3;
+  }
+
+  .grilla-dashboard > :last-child {
+    grid-column: span 2;
+  }
+}

@@ -80,18 +80,16 @@
 
       const celdaEstado = elemento('td');
       celdaEstado.append(
-        elemento('span', `insignia ${p.activa ? 'insignia-ok' : 'insignia-inactiva'}`, p.activa ? 'Activa' : 'De baja')
+        elemento('span', `insignia ${p.activa ? 'insignia-ok' : 'insignia-inactiva'}`, p.activa ? 'Activa' : 'Inactiva')
       );
       fila.append(celdaEstado);
 
+      // Las mismas acciones en todas las filas: lápiz para editar y "Eliminar"
       const celdaAcciones = elemento('td', 'celda-acciones');
-      const editar = elemento('button', 'boton-enlace', 'Editar');
-      editar.type = 'button';
-      editar.addEventListener('click', () => abrirEdicion(p.id_plantilla));
-      celdaAcciones.append(editar);
+      celdaAcciones.append(botonEditar(p));
 
       if (p.activa) {
-        const eliminar = elemento('button', 'boton-enlace peligro', p.total_documentos > 0 ? 'Dar de baja' : 'Eliminar');
+        const eliminar = elemento('button', 'boton-enlace peligro', 'Eliminar');
         eliminar.type = 'button';
         eliminar.addEventListener('click', () => eliminarPlantilla(p));
         celdaAcciones.append(eliminar);
@@ -233,10 +231,26 @@
   });
 
   // ---------- Eliminar / dar de baja / reactivar ----------
+  /** Botón con ícono de lápiz; al pasar el cursor muestra "Editar Plantilla". */
+  function botonEditar(p) {
+    const boton = elemento('button', 'boton-icono-accion');
+    boton.type = 'button';
+    boton.title = 'Editar Plantilla';
+    boton.dataset.ayuda = 'Editar Plantilla';
+    boton.setAttribute('aria-label', `Editar Plantilla ${p.nombre_plantilla}`);
+    boton.innerHTML =
+      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">' +
+      '<path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm17.71-10.21a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>' +
+      '</svg>';
+    boton.addEventListener('click', () => abrirEdicion(p.id_plantilla));
+    return boton;
+  }
+
   async function eliminarPlantilla(p) {
+    // Si la plantilla ya tiene documentos, el servidor la retira en vez de borrarla (protege el historial).
     const pregunta =
       p.total_documentos > 0
-        ? `La plantilla "${p.nombre_plantilla}" tiene ${p.total_documentos} documento(s). Se dará de baja: dejará de estar disponible para documentos nuevos, pero los existentes se conservan. ¿Continuar?`
+        ? `La plantilla "${p.nombre_plantilla}" tiene ${p.total_documentos} documento(s) asociado(s). Se eliminará de la lista de plantillas disponibles, pero esos documentos se conservan. ¿Continuar?`
         : `¿Eliminar definitivamente la plantilla "${p.nombre_plantilla}"? Esta acción no se puede deshacer.`;
     if (!window.confirm(pregunta)) return;
     try {

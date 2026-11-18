@@ -72,7 +72,7 @@ router.patch('/plantillas/:id/estado', soloAdmin, async (req, res, next) => {
     if (!id) return;
     const activa = Boolean(req.body.activa);
     await plantillasService.cambiarEstado(id, activa);
-    res.json({ ok: true, mensaje: activa ? 'Plantilla reactivada.' : 'Plantilla dada de baja.' });
+    res.json({ ok: true, mensaje: activa ? 'Plantilla reactivada.' : 'Plantilla desactivada.' });
   } catch (error) {
     next(error);
   }
@@ -85,7 +85,7 @@ router.delete('/plantillas/:id', soloAdmin, async (req, res, next) => {
     const { resultado } = await plantillasService.eliminar(id);
     const mensaje =
       resultado === 'baja'
-        ? 'La plantilla tiene documentos asociados, por lo que se dio de baja en lugar de eliminarse.'
+        ? 'Plantilla eliminada de la lista. Como tiene documentos asociados, esos documentos se conservan.'
         : 'Plantilla eliminada correctamente.';
     res.json({ ok: true, resultado, mensaje });
   } catch (error) {
