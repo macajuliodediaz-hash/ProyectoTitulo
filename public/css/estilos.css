@@ -1624,3 +1624,15 @@ a.contador-enlace:focus-visible {
     grid-column: span 2;
   }
 }
+
+/* Grillas de tarjetas (Mis tareas): todas del mismo alto.
+   Anula el margen entre tarjetas consecutivas, que hacía más bajas a la 2.ª y la 3.ª. */
+.grilla-tarjetas {
+  align-items: stretch;
+}
+
+.grilla-tarjetas > .tarjeta {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
