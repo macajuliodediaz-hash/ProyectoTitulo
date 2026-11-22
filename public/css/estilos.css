@@ -497,6 +497,7 @@ body {
   padding: 0.15rem 0.6rem;
   font-size: 0.8rem;
   font-weight: bold;
+  white-space: nowrap;
   border-radius: 999px;
 }
 
