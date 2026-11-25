@@ -1,0 +1,3 @@
+# ArgusNexus: proyecto de título académico con datos ficticios. No indexar.
+User-agent: *
+Disallow: /
